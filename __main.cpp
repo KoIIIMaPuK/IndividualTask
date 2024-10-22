@@ -2,7 +2,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //
-// Подключения моих классов
+// РџРѕРґРєР»СЋС‡РµРЅРёСЏ РјРѕРёС… РєР»Р°СЃСЃРѕРІ
 //
 #include "SClient.h"
 //
@@ -22,55 +22,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 int main()
 {
-	SClient client;
-	std::ofstream fout;
-
-	client.FWriteToFile(fout);
-
-	fout.close();
-
 
 	return EXIT_SUCCESS;
 }
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Пустошь.... Здесь один лишь важный мусор
-//
-/*
-	std::string path = "myFile.txt";		// инициализируем переменную именем файла, что по дефолту создаст в папке проекта файл с таким именем
-
-	std::ofstream fout;						// Создаем объект класса ofstream, позволяющий производить запись в файл
-
-	fout.open(path, std::ofstream::app);	// открываем файл
-	std::cout << "1" << std::endl;
-
-	if (!fout.is_open()) return -1;			// выдаем исключение в случае, если не удалось открыть файл
-
-	fout << "Это наши данные";				// запихиваем в файл данные
-	std::cout << "2" << std::endl;
-
-	fout.close();							// закрываем файл, обязательно!!! освобождаем ресы
-	std::cout << "3" << std::endl;
-*/
-
-/*
-	void FSETSTRING_ClientFullName(const std::string& VARIABLE_strClientFullName)						{ strClientFullName = VARIABLE_strClientFullName; }
-	void FSETSTRING_ClientPhoneNumber(const std::string& VARIABLE_strClientPhoneNumber)					{ strClientPhoneNumber = VARIABLE_strClientPhoneNumber; }
-	void FSETSTRING_DateConclusionContract(const std::string& VARIABLE_strDateConclusionContract)		{ strDateConclusionContract = VARIABLE_strDateConclusionContract; }
-	void FSETSTRING_DataExpirationContract(const std::string& VARIABLE_strDataExpirationContract)		{ strDataExpirationContract = VARIABLE_strDataExpirationContract; }
-	void FSETDOUBLE_DebtAmount(double VARIABLE_doubleDebtAmount)										{ doubleDebtAmount = VARIABLE_doubleDebtAmount; }
-	void FSETDOUBLE_CreditАllowable(double VARIABLE_doubleCreditАllowable)								{ doubleCreditАllowable = VARIABLE_doubleCreditАllowable; }
-
-	
-	std::string FGETSTRING_ClientFullName()				const { return strClientFullName; }
-	std::string FGETSTRING_ClientPhoneNumber()			const { return strClientPhoneNumber; }
-	std::string FGETSTRING_DateConclusionContract()		const { return strDateConclusionContract; }
-	std::string FGETSTRING_DataExpirationContract()		const { return strDataExpirationContract; }
-	double FGETDOUBLE_DebtAmount()						const { return doubleDebtAmount; };
-	double FGETDOUBLE_CreditАllowable()					const { return doubleCreditАllowable; }
-*/
-//
-/////////////////////////////////////////////////////////////////////////////////////////
