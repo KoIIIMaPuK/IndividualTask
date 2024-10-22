@@ -2,16 +2,16 @@
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 //
-// Сеттеры
+// РЎРµС‚С‚РµСЂС‹
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-inline void SClient::FSETSTRING_ClientFullName(const std::string& VARIABLE_strClientFullName)					{ this->strClientFullName = VARIABLE_strClientFullName; }
-inline void SClient::FSETSTRING_ClientPhoneNumber(const std::string& VARIABLE_strClientPhoneNumber)				{ this->strClientPhoneNumber = VARIABLE_strClientPhoneNumber; }
-inline void SClient::FSETSTRING_DateConclusionContract(const std::string& VARIABLE_strDateConclusionContract)	{ this->strDateConclusionContract = VARIABLE_strDateConclusionContract; }
-inline void SClient::FSETSTRING_DataExpirationContract(const std::string& VARIABLE_strDataExpirationContract)	{ this->strDataExpirationContract = VARIABLE_strDataExpirationContract; }
-inline void SClient::FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile)								{ this->strPathFile = VARIABLE_strPathFile; }
-inline void SClient::FSETDOUBLE_DebtAmount(double VARIABLE_doubleDebtAmount)									{ this->doubleDebtAmount = VARIABLE_doubleDebtAmount; }
-inline void SClient::FSETDOUBLE_CreditАllowable(double VARIABLE_doubleCreditАllowable)							{ this->doubleCreditАllowable = VARIABLE_doubleCreditАllowable; }
+void SClient::FSETSTRING_ClientFullName(const std::string& VARIABLE_strClientFullName)			{ this->strClientFullName = VARIABLE_strClientFullName; }
+void SClient::FSETSTRING_ClientPhoneNumber(const std::string& VARIABLE_strClientPhoneNumber)		{ this->strClientPhoneNumber = VARIABLE_strClientPhoneNumber; }
+void SClient::FSETSTRING_DateConclusionContract(const std::string& VARIABLE_strDateConclusionContract)	{ this->strDateConclusionContract = VARIABLE_strDateConclusionContract; }
+void SClient::FSETSTRING_DataExpirationContract(const std::string& VARIABLE_strDataExpirationContract)	{ this->strDataExpirationContract = VARIABLE_strDataExpirationContract; }
+void SClient::FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile)				{ this->strPathFile = VARIABLE_strPathFile; }
+void SClient::FSETDOUBLE_DebtAmount(double VARIABLE_doubleDebtAmount)					{ this->doubleDebtAmount = VARIABLE_doubleDebtAmount; }
+void SClient::FSETDOUBLE_CreditРђllowable(double VARIABLE_doubleCreditРђllowable)				{ this->doubleCreditРђllowable = VARIABLE_doubleCreditРђllowable; }
 
 
 
@@ -22,16 +22,16 @@ inline void SClient::FSETDOUBLE_CreditАllowable(double VARIABLE_doubleCreditАllo
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 //
-// Геттеры
+// Р“РµС‚С‚РµСЂС‹
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-std::string SClient::FGETSTRING_ClientFullName()			const	{ return this->strClientFullName; }
-std::string SClient::FGETSTRING_ClientPhoneNumber()			const	{ return this->strClientPhoneNumber; }
+std::string SClient::FGETSTRING_ClientFullName()		const	{ return this->strClientFullName; }
+std::string SClient::FGETSTRING_ClientPhoneNumber()		const	{ return this->strClientPhoneNumber; }
 std::string SClient::FGETSTRING_DateConclusionContract()	const	{ return this->strDateConclusionContract; }
 std::string SClient::FGETSTRING_DataExpirationContract()	const	{ return this->strDataExpirationContract; }
-std::string SClient::FGETSTRING_PathFile()					const	{ return this->strPathFile; }
-double SClient::FGETDOUBLE_DebtAmount()						const	{ return this->doubleDebtAmount; }
-double SClient::FGETDOUBLE_CreditАllowable()				const	{ return this->doubleCreditАllowable; }
+std::string SClient::FGETSTRING_PathFile()			const	{ return this->strPathFile; }
+double SClient::FGETDOUBLE_DebtAmount()				const	{ return this->doubleDebtAmount; }
+double SClient::FGETDOUBLE_CreditРђllowable()			const	{ return this->doubleCreditРђllowable; }
 
 
 
@@ -42,18 +42,20 @@ double SClient::FGETDOUBLE_CreditАllowable()				const	{ return this->doubleCredi
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 //
-// Запись в файл
+// Р—Р°РїРёСЃСЊ РІ С„Р°Р№Р»
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 void SClient::FWriteToFile(std::ofstream& objectClass)
 {
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// Открываем файл и проверяем возможные ошибки.
-	// В случае неудачи бросем исключение.
+	// РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р» Рё РїСЂРѕРІРµСЂСЏРµРј РІРѕР·РјРѕР¶РЅС‹Рµ РѕС€РёР±РєРё.
+	// Р’ СЃР»СѓС‡Р°Рµ РЅРµСѓРґР°С‡Рё Р±СЂРѕСЃРµРј РёСЃРєР»СЋС‡РµРЅРёРµ.
+	// 
+	// РџСЂРёРјРµС‡Р°РЅРёРµ [0]: РџРѕРјРµРЅСЏС‚СЊ РЅР° <try catch>
 	//
 	objectClass.open(this->strPathFile, std::ofstream::app);
-	if (!objectClass.is_open())
+	if (!objectClass.is_open()) // РџСЂРѕРІРµСЂСЏРµРј
 	{
 		throw std::runtime_error("Failed to open file: " + this->strPathFile);
 	}
@@ -65,38 +67,85 @@ void SClient::FWriteToFile(std::ofstream& objectClass)
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// Производим инициализацию переменных
-	//
-	std::cout << "Enter full name: ";								std::getline(std::cin, this->strClientFullName);			std::cout << std::endl; // Используем getline, чтобы избежать проблем с пробелами у std::cin
-	std::cout << "Enter phone number: ";							std::getline(std::cin, this->strClientPhoneNumber);			std::cout << std::endl; // Используем getline, чтобы избежать проблем с пробелами у std::cin
-	std::cout << "Enter the date of conclusion of the contract: ";	std::getline(std::cin, this->strDateConclusionContract);	std::cout << std::endl; // Используем getline, чтобы избежать проблем с пробелами у std::cin
-	std::cout << "Enter the end date of the contract: ";			std::getline(std::cin, this->strDataExpirationContract);	std::cout << std::endl; // Используем getline, чтобы избежать проблем с пробелами у std::cin
-	std::cout << "Enter the amount of debt ";						std::cin >> this->doubleDebtAmount;							std::cout << std::endl;
-	std::cout << "Enter acceptable credit ";						std::cin >> this->doubleCreditАllowable;					std::cout << std::endl;
-	//
-	/////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-	/////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Запись в файл
-	//
-	objectClass << this->strClientFullName			<< ', '
-				<< this->strClientPhoneNumber		<< ', '
-				<< this->strDateConclusionContract	<< ', '
-				<< this->strDataExpirationContract	<< ', '
-				<< this->doubleDebtAmount			<< ', '
-				<< this->doubleCreditАllowable		<< '\n';
+	// РџСЂРѕРёР·РІРѕРґРёРј РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ РїРµСЂРµРјРµРЅРЅС‹С…
+	// 
+	SetConsoleCP(1251);	// РњРµРЅСЏРµРј РєРѕРґРёСЂРѕРІРєСѓ РєРѕРЅСЃРѕР»Рё РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕР№ Р·Р°РїРёСЃРё РєРёСЂРёР»Р»РёС†Рё РІ С„Р°Р№Р»
+	std::cout << "~$ Enter full name: ";						std::getline(std::cin, this->strClientFullName);		std::cout << "-------------------" << std::endl; // РСЃРїРѕР»СЊР·СѓРµРј getline, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСЂРѕР±Р»РµРј СЃ РїСЂРѕР±РµР»Р°РјРё Сѓ std::cin
+	std::cout << "~$ Enter phone number: ";						std::getline(std::cin, this->strClientPhoneNumber);		std::cout << "-------------------" << std::endl; // РСЃРїРѕР»СЊР·СѓРµРј getline, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСЂРѕР±Р»РµРј СЃ РїСЂРѕР±РµР»Р°РјРё Сѓ std::cin
+	std::cout << "~$ Enter the date of conclusion of the contract: ";		std::getline(std::cin, this->strDateConclusionContract);	std::cout << "-------------------" << std::endl; // РСЃРїРѕР»СЊР·СѓРµРј getline, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСЂРѕР±Р»РµРј СЃ РїСЂРѕР±РµР»Р°РјРё Сѓ std::cin
+	std::cout << "~$ Enter the end date of the contract: ";				std::getline(std::cin, this->strDataExpirationContract);	std::cout << "-------------------" << std::endl; // РСЃРїРѕР»СЊР·СѓРµРј getline, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСЂРѕР±Р»РµРј СЃ РїСЂРѕР±РµР»Р°РјРё Сѓ std::cin
+	std::cout << "~$ Enter the amount of debt ";					std::cin >> this->doubleDebtAmount;				std::cout << "-------------------" << std::endl;
+	std::cout << "~$ Enter acceptable credit ";					std::cin >> this->doubleCreditРђllowable;			std::cout << "-------------------" << std::endl;
+	SetConsoleCP(866);	// Р’РѕР·РІСЂР°С‰Р°РµРј РёСЃС…РѕРґРЅСѓСЋ
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// Проверка на ошибки записи
+	// Р—Р°РїРёСЃСЊ РІ С„Р°Р№Р»
+	//
+	objectClass << this->strClientFullName				<< ", "
+				<< this->strClientPhoneNumber		<< ", "
+				<< this->strDateConclusionContract	<< ", "
+				<< this->strDataExpirationContract	<< ", "
+				<< this->doubleDebtAmount		<< ", "
+				<< this->doubleCreditРђllowable		<< '\n';
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// РџСЂРѕРІРµСЂРєР° РЅР° РѕС€РёР±РєРё Р·Р°РїРёСЃРё
+	// 
+	// РџСЂРёРјРµС‡Р°РЅРёРµ [0]: РџРѕРјРµРЅСЏС‚СЊ РЅР° <try catch>
 	//
 	if (objectClass.fail())
 	{
 		throw std::runtime_error("Failed to write to file: " + strPathFile);
+	}
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////
+}
+
+
+
+
+
+
+
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+//
+// Р§С‚РµРЅРёРµ РёР· С„Р°Р№Р»Р°
+//
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+void SClient::FReadSymbolFromFile(std::ifstream& objectClass)
+{
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// РћС‚РєСЂС‹С‚РёРµ СЃ РїСЂРѕРІРµСЂРєРѕР№ С„Р°Р№Р»Р° РґР»СЏ С‡С‚РµРЅРёСЏ
+	//
+	objectClass.open(this->strPathFile);
+	if (!objectClass.is_open()) // РџСЂРѕРІРµСЂСЏРµРј
+	{
+		throw std::runtime_error("Failed to open file: " + this->strPathFile);
+	}
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Р§РёС‚Р°РµРј РѕС‚РєСЂС‹С‚С‹Р№ С„Р°Р№Р»
+	//
+	char charGetSymbolFromFile; // РџРµСЂРµРјРµРЅРЅР°СЏ, РґР»СЏ РїРѕСЃРёРјРІРѕР»СЊРЅРѕР№ Р·Р°РїРёСЃРё РёР· С„Р°Р№Р»Р°
+	while (objectClass.get(charGetSymbolFromFile))	// РџРѕР»СѓС‡Р°РµРј СЃРёРјРІРѕР»С‹
+ 	{
+		std::cout << charGetSymbolFromFile;	// Р’С‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ
 	}
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////
