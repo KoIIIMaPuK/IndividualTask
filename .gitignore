@@ -1,0 +1,39 @@
+# Скомпилированные файлы
+*.exe
+*.out
+*.o
+*.obj
+*.dll
+*.pdb
+*.idb
+*.ilk
+*.lib
+
+# Папки сборки
+Debug/
+Release/
+x64/
+x86/
+bin/
+obj/
+
+# Файлы настроек среды разработки
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Логи
+*.log
+
+# Временные файлы
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Файлы системы
+Thumbs.db
+.DS_Store
