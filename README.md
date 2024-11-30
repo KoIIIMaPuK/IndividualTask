@@ -23,7 +23,7 @@
 
 
 # Установка
-## Visual Studio
+## Компиляция и запуск в Visual Studio
 1. Клонируйте репозиторий в удобную папку с помощью команды:
     ```bash
     git clone https://github.com/KoIIIMaPuK/IndividualTask.git
@@ -35,5 +35,20 @@
 4. Выберите конфигурацию `Debug`.
 5. Соберите проект, нажав `Ctrl + Shift + B`, и запустите его с помощью `Ctrl + F5`.
 
-## Visual Studio Code
-- **Error**: пока ничего не писал. Планирую добавить инструкции по настройке проекта в Visual Studio Code в будущем.
+## Компиляция и запуск в Visual Studio Code
+Для компиляции и запуска проекта в Visual Studio Code выполните следующие шаги:
+
+### 1. Установка необходимых инструментов
+
+Перед началом убедитесь, что у вас установлены следующие инструменты:
+
+- **Visual Studio Code**: [Скачать Visual Studio Code](https://code.visualstudio.com/)
+- **Компилятор C++**: Установите компилятор, такой как [MinGW](https://www.mingw-w64.org/) (для Windows) или используйте встроенные инструменты компиляции в Linux или macOS.
+- **Расширение C/C++ для Visual Studio Code**: Установите расширение от Microsoft для поддержки C/C++. Для этого откройте Visual Studio Code, перейдите в раздел Extensions (Расширения) и найдите "C/C++".
+
+### 2. Клонирование репозитория
+
+Клонируйте репозиторий с проектом на ваш компьютер:
+
+```bash
+git clone https://github.com/KoIIIMaPuK/IndividualTask.git
