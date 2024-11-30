@@ -149,7 +149,7 @@ double SService::FGETDOUBLE_Tariff() 				const {return this->doubleTariff;}
 */
 void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameFile)
 {
-	strPathFile += nameFile;
+	strPathFile += nameFile + ".txt";
 
 	this->strNameFile = nameFile;
 

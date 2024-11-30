@@ -79,7 +79,7 @@ std::uint64_t SUsage::FGETUINT64T_ServiceCode()		const { return this->uint64tSer
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 void SUsage::FWriteToFile(std::ofstream& objectClass, const std::string& nameFile)
 {
-	strPathFile += nameFile;
+	strPathFile += nameFile + ".txt";
 
 	this->strNameFile = nameFile;
 	

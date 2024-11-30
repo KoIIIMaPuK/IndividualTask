@@ -155,7 +155,7 @@ double SClient::FGETDOUBLE_CreditAllowable()				const { return this->doubleCredi
  */
 void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFile)
 {
-	strPathFile += nameFile;
+	strPathFile += nameFile + ".txt";
 
 	this->strNameFile = nameFile;
 	

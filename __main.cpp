@@ -130,6 +130,41 @@ static inline void FShowMenuFile() {
 
 
 
+/**
+ * @brief Получает текущее время в формате строки.
+ *
+ * Функция использует стандартную библиотеку <chrono> для получения
+ * текущего времени и форматирует его в строку вида "YYYY-MM-DD HH:MM:SS".
+ *
+ * @return std::string Строка, представляющая текущее время в формате "YYYY-MM-DD HH:MM:SS".
+ */
+std::string GetCurrentTime() {
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm now_tm = *std::localtime(&now_c);
+    
+    std::ostringstream oss;
+    oss << std::put_time(&now_tm, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 *
@@ -151,115 +186,143 @@ static inline void FShowMenuFile() {
 void HandleFileOperation(Action action, FileType fileType, SClient& client, SService& service, SUsage& usage) {
     std::ofstream WobjectClass; // Объект для записи в файл
     std::ifstream RobjectClass; // Объект для чтения из файла
+    std::ofstream reportFile("TextFilesFolder/Report.txt", std::ios::app); // Открываем файл отчета в режиме добавления
 
+    // Получаем текущее время
+    std::string currentTime = GetCurrentTime();
 
-    //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-    // 
-    // Выбор действия в зависимости от типа файла.
-    //
-    //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     switch (fileType) {
-    case FileType::CLIENT: // Если выбран тип файла "Client"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::CLIENT:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Client file...\n";
-            client.FWriteToFile(WobjectClass, "Client"); // Запись данных клиента в файл
+            client.FWriteToFile(WobjectClass, "Client");
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Client file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Client file...\n";
-            client.FReadFileSymbolically(RobjectClass); // Чтение данных клиента из файла
+            client.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Client file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::SERVICE: // Если выбран тип файла "Service"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::SERVICE:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Service file...\n";
-            service.FWriteToFile(WobjectClass, "Service"); // Запись данных сервиса в файл
+            service.FWriteToFile(WobjectClass, "Service");
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Service file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Service file...\n";
-            service.FReadFileSymbolically(RobjectClass); // Чтение данных сервиса из файла
+            service.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Service file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::USAGE: // Если выбран тип файла "Usage"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::USAGE:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Usage file...\n";
-            usage.FWriteToFile(WobjectClass, "Usage"); // Запись данных использования в файл
+            usage.FWriteToFile(WobjectClass, "Usage");
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Usage file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Usage file...\n";
-            usage.FReadFileSymbolically(RobjectClass); // Чтение данных использования из файла
+            usage.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Usage file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::BACK: // Если выбран тип файла "Back"
+    case FileType::BACK:
         std::cout << "Returning to the previous menu...\n";
         break;
-    default: // Выдаем исключение, в случае ошибочного ввода
-        std::cerr << "I$> Invalid input. You entered an invalid file type.\n"; // Сообщение об ошибке
+    default:
+        std::cerr << "I$> Invalid input. You entered an invalid file type.\n";
         break;
     }
+
+    // Закрываем файл отчета
+    reportFile.close();
 }
 
 
 
-void HandleFileOperation(Action action, FileType fileType, std::string& fileName,SClient& client, SService& service, SUsage& usage) {
+
+
+/*
+*
+*       Функция для обработки операций с файлами
+*
+*       Функция HandleFileOperation выполняет операции ввода и чтения данных
+*       из файлов в зависимости от типа файла и действия, выбранного пользователем.
+*
+*       Параметры:
+*       - char action: действие, которое нужно выполнить (INPUT или READ).
+*       - FileType fileType: тип файла, с которым будет работать функция (Client, Service, Usage).
+*       - std::string& fileName: название для файла
+*       - SClient& client: ссылка на объект клиента для выполнения операций с файлом клиента.
+*       - SService& service: ссылка на объект сервиса для выполнения операций с файлом сервиса.
+*       - SUsage& usage: ссылка на объект использования для выполнения операций с файлом использования.
+*
+*       Функция использует потоки для чтения и записи данных в файлы.
+*
+*/
+void HandleFileOperation(Action action, FileType fileType, std::string& fileName, SClient& client, SService& service, SUsage& usage) {
     std::ofstream WobjectClass; // Объект для записи в файл
     std::ifstream RobjectClass; // Объект для чтения из файла
+    std::ofstream reportFile("TextFilesFolder/Report.txt", std::ios::app); // Открываем файл отчета в режиме добавления
 
+    // Получаем текущее время
+    std::string currentTime = GetCurrentTime();
 
-    //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-    // 
-    // Выбор действия в зависимости от типа файла.
-    //
-    //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     switch (fileType) {
-    case FileType::CLIENT: // Если выбран тип файла "Client"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::CLIENT:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Client file...\n";
-            client.FWriteToFile(WobjectClass, fileName); // Запись данных клиента в файл
+            client.FWriteToFile(WobjectClass, fileName);
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Client file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Client file...\n";
-            client.FReadFileSymbolically(RobjectClass); // Чтение данных клиента из файла
+            client.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Client file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::SERVICE: // Если выбран тип файла "Service"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::SERVICE:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Service file...\n";
-            service.FWriteToFile(WobjectClass, fileName); // Запись данных сервиса в файл
+            service.FWriteToFile(WobjectClass, fileName);
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Service file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Service file...\n";
-            service.FReadFileSymbolically(RobjectClass); // Чтение данных сервиса из файла
+            service.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Service file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::USAGE: // Если выбран тип файла "Usage"
-        if (action == Action::AINPUT) { // Если действие - ввод данных
+    case FileType::USAGE:
+        if (action == Action::AINPUT) {
             std::cout << "Writing to Usage file...\n";
-            usage.FWriteToFile(WobjectClass, fileName); // Запись данных использования в файл
+            usage.FWriteToFile(WobjectClass, fileName);
             std::cout << "Writing completed successfully!\n";
-        }
-        else { // Если действие - чтение данных
+            reportFile << currentTime << " - Writing to Usage file completed successfully.\n"; // Записываем в отчет
+        } else {
             std::cout << "Reading from Usage file...\n";
-            usage.FReadFileSymbolically(RobjectClass); // Чтение данных использования из файла
+            usage.FReadFileSymbolically(RobjectClass);
             std::cout << "Reading completed successfully!\n";
+            reportFile << currentTime << " - Reading from Usage file completed successfully.\n"; // Записываем в отчет
         }
         break;
-    case FileType::BACK: // Если выбран тип файла "Back"
+    case FileType::BACK:
         std::cout << "Returning to the previous menu...\n";
         break;
-    default: // Выдаем исключение, в случае ошибочного ввода
-        std::cerr << "I$> Invalid input. You entered an invalid file type.\n"; // Сообщение об ошибке
+    default:
+        std::cerr << "I$> Invalid input. You entered an invalid file type.\n";
         break;
     }
+
+    // Закрываем файл отчета
+    reportFile.close();
 }
 
 
