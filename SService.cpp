@@ -40,7 +40,7 @@ void SService::FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile) 				
  *
  * @param VARIABLE_uint64tServiceCode Код сервиса.
  */
-void SService::FSETUINT64T_ServiceCode(const std::uint64_t& VARIABLE_uint64tServiceCode) 	{this->uint64tServiceCode = VARIABLE_uint64tServiceCode;}
+void SService::FSETSTRING_ServiceCode(const std::string& VARIABLE_strServiceCode) 	{this->strServiceCode = VARIABLE_strServiceCode;}
 
 
 
@@ -106,7 +106,7 @@ std::string SService::FGETSTRING_PathFile() 		const {return this->strPathFile;}
  *
  * @return Код сервиса.
  */
-std::uint64_t SService::FGETUINT64T_ServiceCode() 	const {return this->uint64tServiceCode;}
+std::string SService::FGETSTRING_ServiceCode() 	const {return this->strServiceCode;}
 
 
 
@@ -164,7 +164,7 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
 	std::cin.ignore();
 	std::cout << "~$ Enter full name: ";								std::getline(std::cin, this->strNameService);		std::cout << "\n-------------------" << std::endl; 
 	std::cout << "~$ Enter phone number: ";								std::getline(std::cin, this->strTimeUnit);			std::cout << "\n-------------------" << std::endl; 
-	std::cout << "~$ Enter the amount of debt ";						std::cin >> this->uint64tServiceCode;				std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter the amount of debt ";						std::cin >> this->strServiceCode;				std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
 	std::cout << "~$ Enter acceptable credit ";							std::cin >> this->doubleTariff;						std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
 
 
@@ -172,7 +172,7 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
 
 	objectClass << this->strNameService << ", "
 		<< this->strTimeUnit << ", "
-		<< this->uint64tServiceCode << ", "
+		<< this->strServiceCode << ", "
 		<< this->doubleTariff << '\n';
 	
 
@@ -200,8 +200,12 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
  *
  * @throws std::runtime_error Если файл не может быть открыт.
  */
-void SService::FReadFileSymbolically(std::ifstream& objectClass)
+void SService::FReadFileSymbolically(std::ifstream& objectClass, const std::string& nameFile)
 {
+	strPathFile += nameFile + ".txt";
+
+	this->strNameFile = nameFile;
+
     objectClass.open(this->strPathFile);
     if (!objectClass.is_open())
     {

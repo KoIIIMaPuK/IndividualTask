@@ -45,7 +45,151 @@ enum Action { AINPUT = 1, AREAD, ACREATE, ATASK, AEXIT = 0};
  *     действие. Значение: 4
  *
  */
-enum FileType { CLIENT = 1, SERVICE, USAGE, BACK };
+enum FileType { CLIENT = 1, SERVICE, USAGE, BACK = 0};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct Params {
+    std::vector<std::string> services;
+    std::string startDate;
+    std::string endDate;
+};
+
+bool IsValidDate(const std::string& date) {
+    std::tm tm = {};
+    std::istringstream ss(date);
+    ss >> std::get_time(&tm, "%d.%m.%Y");
+    return !ss.fail() && ss.eof(); 
+}
+
+Params ReadParams(const std::string& filename) {
+    Params params;
+    std::ifstream paramFile(filename);
+
+    if (!paramFile.is_open()) {
+        throw std::runtime_error("Failed to open params file: " + filename);
+    }
+
+    std::string line;
+    std::string currentSection;
+
+    while (std::getline(paramFile, line)) {
+        // Удаляем пробелы
+        line.erase(0, line.find_first_not_of(" \n\r\t"));
+        line.erase(line.find_last_not_of(" \n\r\t") + 1);
+
+        // Пропускаем пустые строки и комментарии
+        if (line.empty() || line[0] == ';') {
+            continue;
+        }
+
+        // Проверяем, является ли строка заголовком секции
+        if (line[0] == '[' && line.back() == ']') {
+            currentSection = line.substr(1, line.size() - 2); // Получаем имя секции
+            continue;
+        }
+
+        // Обрабатываем строки в зависимости от текущей секции
+        if (currentSection == "Services") {
+            params.services.push_back(line); // Добавляем услугу
+        } else if (currentSection == "Dates") {
+            if (line.find("startDate=") == 0) {
+                params.startDate = line.substr(10); // Считываем startDate
+            } else if (line.find("endDate=") == 0) {
+                params.endDate = line.substr(8); // Считываем endDate
+            }
+        }
+    }
+
+    paramFile.close();
+    return params;
+}
+
+
+
+
+
+
+bool IsClientValid(const SClient& client, const Params& params) {
+    bool serviceMatch = false;
+    for (const auto& service : params.services) {
+        if (client.FGETSTRING_ClientFullName().find(service) != std::string::npos) {
+            serviceMatch = true;
+            break;
+        }
+    }
+
+    std::tm start = {};
+    std::tm end = {};
+    std::tm clientDate = {};
+
+    std::istringstream ssStart(params.startDate);
+    ssStart >> std::get_time(&start, "%d.%m.%Y");
+
+    std::istringstream ssEnd(params.endDate);
+    ssEnd >> std::get_time(&end, "%d.%m.%Y");
+
+    std::istringstream ssClientDate(client.FGETSTRING_DateConclusionContract());
+    ssClientDate >> std::get_time(&clientDate, "%d.%m.%Y");
+
+    bool dateMatch = std::mktime(&clientDate) >= std::mktime(&start) && std::mktime(&clientDate) <= std::mktime(&end);
+
+    return serviceMatch && dateMatch;
+}
+
+
+
+
+
+
+
+
+void WriteFilteredClientsToReport(const std::vector<SClient>& filteredClients, const std::string& reportFileName) {
+    std::ofstream reportFile(reportFileName);
+    if (!reportFile.is_open()) {
+        throw std::runtime_error("Failed to open report file: " + reportFileName);
+    }
+
+    for (const auto& client : filteredClients) {
+        reportFile << client.FGETSTRING_ClientFullName() << ", "
+                   << client.FGETSTRING_ClientPhoneNumber() << ", "
+                   << client.FGETSTRING_DateConclusionContract() << ", "
+                   << client.FGETSTRING_DataExpirationContract() << ", "
+                   << client.FGETDOUBLE_DebtAmount() << ", "
+                   << client.FGETDOUBLE_CreditAllowable() << '\n';
+    }
+
+    reportFile.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -195,7 +339,7 @@ void HandleFileOperation(Action action, FileType fileType, SClient& client, SSer
             reportFile << currentTime << " - Writing to Client file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Client file...\n";
-            client.FReadFileSymbolically(RobjectClass);
+            client.FReadFileSymbolically(RobjectClass, "Client");
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Client file completed successfully.\n"; // Записываем в отчет
         }
@@ -208,7 +352,7 @@ void HandleFileOperation(Action action, FileType fileType, SClient& client, SSer
             reportFile << currentTime << " - Writing to Service file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Service file...\n";
-            service.FReadFileSymbolically(RobjectClass);
+            service.FReadFileSymbolically(RobjectClass, "Service");
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Service file completed successfully.\n"; // Записываем в отчет
         }
@@ -221,7 +365,7 @@ void HandleFileOperation(Action action, FileType fileType, SClient& client, SSer
             reportFile << currentTime << " - Writing to Usage file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Usage file...\n";
-            usage.FReadFileSymbolically(RobjectClass);
+            usage.FReadFileSymbolically(RobjectClass, "Usage");
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Usage file completed successfully.\n"; // Записываем в отчет
         }
@@ -273,7 +417,7 @@ void HandleFileOperation(Action action, FileType fileType, std::string& fileName
             reportFile << currentTime << " - Writing to Client file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Client file...\n";
-            client.FReadFileSymbolically(RobjectClass);
+            client.FReadFileSymbolically(RobjectClass, fileName);
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Client file completed successfully.\n"; // Записываем в отчет
         }
@@ -286,7 +430,7 @@ void HandleFileOperation(Action action, FileType fileType, std::string& fileName
             reportFile << currentTime << " - Writing to Service file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Service file...\n";
-            service.FReadFileSymbolically(RobjectClass);
+            service.FReadFileSymbolically(RobjectClass, fileName);
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Service file completed successfully.\n"; // Записываем в отчет
         }
@@ -299,7 +443,7 @@ void HandleFileOperation(Action action, FileType fileType, std::string& fileName
             reportFile << currentTime << " - Writing to Usage file completed successfully.\n"; // Записываем в отчет
         } else {
             std::cout << "Reading from Usage file...\n";
-            usage.FReadFileSymbolically(RobjectClass);
+            usage.FReadFileSymbolically(RobjectClass, fileName);
             std::cout << "Reading completed successfully!\n";
             reportFile << currentTime << " - Reading from Usage file completed successfully.\n"; // Записываем в отчет
         }
@@ -381,7 +525,7 @@ int main() {
             HandleFileOperation(userAction, fileType, client, service, usage);
         } else if(userAction == Action::ACREATE) {
             std::string fileName;
-            std::cout << "Input Path-to-Name/Name File: ";
+            std::cout << "Input Name File: ";
             std::cin >> fileName;
 
             FShowMenuFile();
@@ -394,6 +538,32 @@ int main() {
             HandleFileOperation(userAction, fileType, fileName, client, service, usage);
         } else if (userAction == Action::ATASK) {
             std::cout << "Error: not found";
+
+            Params params = ReadParams("TextFilesFolder/Param.ini");
+
+            std::vector<SClient> clients;
+            std::ifstream clientFile("TextFilesFolder/Client.txt");
+            if (!clientFile.is_open()) {
+                throw std::runtime_error("Failed to open clients file.");
+            }
+
+            SClient client;
+            while (clientFile >> client) {
+                clients.push_back(client);
+            }
+            clientFile.close();
+
+            std::vector<SClient> filteredClients;
+            for (const auto& client : clients) {
+                if (IsClientValid(client, params)) {
+                    filteredClients.push_back(client);
+                }
+            }
+
+            WriteFilteredClientsToReport(filteredClients, "Report.txt");
+            std::cout << "Отчет успешно создан: Report.txt" << std::endl;
+
+
         } else { // Обработка неверного ввода
             std::cerr << "Invalid input. Expected 1, 2, or 0.\n";
         }

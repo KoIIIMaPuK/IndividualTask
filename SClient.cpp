@@ -155,7 +155,7 @@ double SClient::FGETDOUBLE_CreditAllowable()				const { return this->doubleCredi
  */
 void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFile)
 {
-	strPathFile += nameFile + ".txt";
+	this->strPathFile += nameFile + ".txt";
 
 	this->strNameFile = nameFile;
 	
@@ -215,8 +215,12 @@ void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFi
  *
  * @throws std::runtime_error Если файл не может быть открыт.
  */
-void SClient::FReadFileSymbolically(std::ifstream& objectClass)
+void SClient::FReadFileSymbolically(std::ifstream& objectClass, const std::string& nameFile)
 {
+	this->strPathFile += nameFile + ".txt";
+
+	this->strNameFile = nameFile;
+
 	objectClass.open(this->strPathFile);
 	if (!objectClass.is_open()) 
 	{
@@ -233,4 +237,28 @@ void SClient::FReadFileSymbolically(std::ifstream& objectClass)
 	std::cout << std::endl << "---------------------------------" << std::endl;	
 
 	objectClass.close();
+}
+
+
+
+
+
+
+
+
+
+
+std::istream& operator>>(std::istream& is, SClient& client) {
+	std::string line;
+	if (std::getline(is, line)) {
+		std::istringstream ss(line);
+		std::getline(ss, client.strClientFullName, ',');
+		std::getline(ss, client.strClientPhoneNumber, ',');
+		std::getline(ss, client.strDateConclusionContract, ',');
+		std::getline(ss, client.strDataExpirationContract, ',');
+		ss >> client.doubleDebtAmount;
+		ss.ignore(1); // Игнорируем запятую
+		ss >> client.doubleCreditAllowable;
+	}
+	return is;
 }

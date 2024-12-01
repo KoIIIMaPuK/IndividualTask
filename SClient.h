@@ -126,7 +126,7 @@ public:
 	// 
 	//
 	//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	void FReadFileSymbolically(std::ifstream& objectClass);
+	void FReadFileSymbolically(std::ifstream& objectClass, const std::string& nameFile);
 
 
 
@@ -137,6 +137,8 @@ public:
 
 
 
+
+    friend std::istream& operator>>(std::istream& is, SClient& client);
 
 
  

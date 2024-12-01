@@ -126,8 +126,12 @@ void SUsage::FWriteToFile(std::ofstream& objectClass, const std::string& nameFil
 //
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-void SUsage::FReadFileSymbolically(std::ifstream& objectClass)
+void SUsage::FReadFileSymbolically(std::ifstream& objectClass, const std::string& nameFile)
 {
+	strPathFile += nameFile + ".txt";
+
+	this->strNameFile = nameFile;
+	
 	objectClass.open(this->strPathFile);
 	if (!objectClass.is_open())
 	{

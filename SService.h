@@ -25,13 +25,13 @@ public:
 		const std::string& VARIABLE_strTimeUnit,
 		const std::string& VARIABLE_strPathFile,
 		const std::string& VARIABLE_strNameFiles,
-		const std::uint64_t& VARIABLE_uint64tServiceCode,
+		const std::string& VARIABLE_strServiceCode,
 		const double& VARIABLE_doubleTariff
 	) : strNameService(VARIABLE_strNameService),
 		strTimeUnit(VARIABLE_strTimeUnit),
 		strPathFile(VARIABLE_strPathFile),
 		strNameFile(VARIABLE_strNameFiles),
-		uint64tServiceCode(VARIABLE_uint64tServiceCode),
+		strServiceCode(VARIABLE_strServiceCode),
 		doubleTariff(VARIABLE_doubleTariff)
 	{}
 
@@ -51,7 +51,7 @@ public:
 		strTimeUnit("Undefined"),
 		strPathFile("TextFilesFolder/"),
 		strNameFile("UndefinedService.txt"),
-		uint64tServiceCode(0),
+		strServiceCode(0),
 		doubleTariff(0.0)
 	{}
 
@@ -69,7 +69,7 @@ public:
 	void FSETSTRING_NameService(const std::string& VARIABLE_strNameService);
 	void FSETSTRING_TimeUnit(const std::string& VARIABLE_strTimeUnit);
 	void FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile);
-	void FSETUINT64T_ServiceCode(const std::uint64_t& VARIABLE_uint64tServiceCode);
+	void FSETSTRING_ServiceCode(const std::string& VARIABLE_strServiceCode);
 	void FSETDOUBLE_Tariff(double VARIABLE_doubleTariff);
 
 
@@ -87,7 +87,7 @@ public:
 	std::string		FGETSTRING_NameService()		const;
 	std::string		FGETSTRING_TimeUnit()			const;
 	std::string		FGETSTRING_PathFile()			const;
-	std::uint64_t	FGETUINT64T_ServiceCode()		const;
+	std::string		FGETSTRING_ServiceCode()		const;
 	double			FGETDOUBLE_Tariff()				const;
 
 
@@ -121,7 +121,7 @@ public:
 	//
 	//
 	//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	void FReadFileSymbolically(std::ifstream& objectClass);
+	void FReadFileSymbolically(std::ifstream& objectClass, const std::string& nameFile);
 
 
 
@@ -141,6 +141,6 @@ protected:
 	std::string strTimeUnit;
 	std::string strPathFile;
 	std::string strNameFile;
-	std::uint64_t uint64tServiceCode;
+	std::string strServiceCode;
 	double doubleTariff;
 };
