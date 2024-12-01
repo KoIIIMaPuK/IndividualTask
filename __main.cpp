@@ -26,7 +26,7 @@
 *   - EXIT: Действие, указывающее на выход из программы. Значение: 3
 *
 */
-enum Action { AINPUT = 1, AREAD, ACREATE, AEXIT = 0};
+enum Action { AINPUT = 1, AREAD, ACREATE, ATASK, AEXIT = 0};
 
 
 /**
@@ -73,6 +73,8 @@ enum FileType { CLIENT = 1, SERVICE, USAGE, BACK };
 *       Меню включает:
 *       - опции для ввода данных в файл, 
 *       - чтение данных из файла, 
+*       - создание файла с пользовательским именем
+*       - индивидуальное задание
 *       - выход из программы.
 *
 */
@@ -82,6 +84,7 @@ static inline void FShowMenuAction() {
         << "1. Input to file\n"
         << "2. Reading a File\n"
         << "3. Create a file\n"
+        << "4. Check my task\n"
         << "0. Exit to programm\n"
         << "--------------------------\n";
 }
@@ -100,7 +103,7 @@ static inline void FShowMenuAction() {
 *       1. Client;
 *       2. Service;
 *       3. Usage;
-*       4. Опция возврата в предыдущее меню.
+*       0. Опция возврата в предыдущее меню.
 *
 */
 static inline void FShowMenuFile() {
@@ -162,31 +165,23 @@ std::string GetCurrentTime() {
 
 
 
-
-
-
-
-/*
-*
-*       Функция для обработки операций с файлами
-*
-*       Функция HandleFileOperation выполняет операции ввода и чтения данных
-*       из файлов в зависимости от типа файла и действия, выбранного пользователем.
-*
-*       Параметры:
-*       - char action: действие, которое нужно выполнить (INPUT или READ).
-*       - FileType fileType: тип файла, с которым будет работать функция (Client, Service, Usage).
-*       - SClient& client: ссылка на объект клиента для выполнения операций с файлом клиента.
-*       - SService& service: ссылка на объект сервиса для выполнения операций с файлом сервиса.
-*       - SUsage& usage: ссылка на объект использования для выполнения операций с файлом использования.
-*
-*       Функция использует потоки для чтения и записи данных в файлы.
-*
-*/
+/**
+ *       @brief Функция для обработки операций с файлами
+ *
+ *       Функция HandleFileOperation выполняет операции ввода и чтения данных
+ *       из файлов в зависимости от типа файла и действия, выбранного пользователем.
+ *
+ *       Параметры:
+ *       @param action: действие, которое нужно выполнить (INPUT или READ).
+ *       @param fileType: тип файла, с которым будет работать функция (Client, Service, Usage).
+ *       @param client: ссылка на объект клиента для выполнения операций с файлом клиента.
+ *       @param service: ссылка на объект сервиса для выполнения операций с файлом сервиса.
+ *       @param usage: ссылка на объект использования для выполнения операций с файлом использования.
+ */
 void HandleFileOperation(Action action, FileType fileType, SClient& client, SService& service, SUsage& usage) {
     std::ofstream WobjectClass; // Объект для записи в файл
     std::ifstream RobjectClass; // Объект для чтения из файла
-    std::ofstream reportFile("TextFilesFolder/Report.txt", std::ios::app); // Открываем файл отчета в режиме добавления
+    std::ofstream reportFile("TextFilesFolder/Action.txt", std::ios::app); // Открываем файл отчета в режиме добавления
 
     // Получаем текущее время
     std::string currentTime = GetCurrentTime();
@@ -247,28 +242,24 @@ void HandleFileOperation(Action action, FileType fileType, SClient& client, SSer
 
 
 
-/*
-*
-*       Функция для обработки операций с файлами
-*
-*       Функция HandleFileOperation выполняет операции ввода и чтения данных
-*       из файлов в зависимости от типа файла и действия, выбранного пользователем.
-*
-*       Параметры:
-*       - char action: действие, которое нужно выполнить (INPUT или READ).
-*       - FileType fileType: тип файла, с которым будет работать функция (Client, Service, Usage).
-*       - std::string& fileName: название для файла
-*       - SClient& client: ссылка на объект клиента для выполнения операций с файлом клиента.
-*       - SService& service: ссылка на объект сервиса для выполнения операций с файлом сервиса.
-*       - SUsage& usage: ссылка на объект использования для выполнения операций с файлом использования.
-*
-*       Функция использует потоки для чтения и записи данных в файлы.
-*
-*/
+/**
+ *       @brief Функция для обработки операций с файлами
+ *
+ *       Функция HandleFileOperation выполняет операции ввода и чтения данных
+ *       из файлов в зависимости от типа файла и действия, выбранного пользователем.
+ *
+ *       Параметры:
+ *       @param action: действие, которое нужно выполнить (INPUT или READ).
+ *       @param fileType: тип файла, с которым будет работать функция (Client, Service, Usage).
+ *       @param fileName: название для файла 
+ *       @param client: ссылка на объект клиента для выполнения операций с файлом клиента.
+ *       @param service: ссылка на объект сервиса для выполнения операций с файлом сервиса.
+ *       @param usage: ссылка на объект использования для выполнения операций с файлом использования.
+ */
 void HandleFileOperation(Action action, FileType fileType, std::string& fileName, SClient& client, SService& service, SUsage& usage) {
     std::ofstream WobjectClass; // Объект для записи в файл
     std::ifstream RobjectClass; // Объект для чтения из файла
-    std::ofstream reportFile("TextFilesFolder/Report.txt", std::ios::app); // Открываем файл отчета в режиме добавления
+    std::ofstream reportFile("TextFilesFolder/Action.txt", std::ios::app); // Открываем файл отчета в режиме добавления
 
     // Получаем текущее время
     std::string currentTime = GetCurrentTime();
@@ -401,8 +392,9 @@ int main() {
             if (fileType == BACK) continue; // Возврат в главное меню
 
             HandleFileOperation(userAction, fileType, fileName, client, service, usage);
-        }
-        else { // Обработка неверного ввода
+        } else if (userAction == Action::ATASK) {
+            std::cout << "Error: not found";
+        } else { // Обработка неверного ввода
             std::cerr << "Invalid input. Expected 1, 2, or 0.\n";
         }
     }
