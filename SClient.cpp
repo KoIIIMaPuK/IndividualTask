@@ -238,27 +238,3 @@ void SClient::FReadFileSymbolically(std::ifstream& objectClass, const std::strin
 
 	objectClass.close();
 }
-
-
-
-
-
-
-
-
-
-
-std::istream& operator>>(std::istream& is, SClient& client) {
-	std::string line;
-	if (std::getline(is, line)) {
-		std::istringstream ss(line);
-		std::getline(ss, client.strClientFullName, ',');
-		std::getline(ss, client.strClientPhoneNumber, ',');
-		std::getline(ss, client.strDateConclusionContract, ',');
-		std::getline(ss, client.strDataExpirationContract, ',');
-		ss >> client.doubleDebtAmount;
-		ss.ignore(1); // Игнорируем запятую
-		ss >> client.doubleCreditAllowable;
-	}
-	return is;
-}

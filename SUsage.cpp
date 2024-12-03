@@ -93,16 +93,16 @@ void SUsage::FWriteToFile(std::ofstream& objectClass, const std::string& nameFil
 
 	std::cin.ignore();
 	std::cout << "~$ Enter phone number: ";								std::getline(std::cin, this->strClientPhoneNumber);		std::cout << "\n-------------------" << std::endl;	
-	std::cout << "~$ Enter data time: ";								std::getline(std::cin, this->strUsageDateTime);			std::cout << "\n-------------------" << std::endl;	
+	std::cout << "~$ Enter service code: ";								std::cin >> this->uint64tServiceCode;			       	std::cin.ignore(); 						std::cout << "\n-------------------" << std::endl;	
 	std::cout << "~$ Enter duration: ";									std::getline(std::cin, this->strDuration);				std::cout << "\n-------------------" << std::endl;	
-	std::cout << "~$ Enter servie code: ";								std::cin >> this->uint64tServiceCode;					std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter usage date time: ";							std::getline(std::cin, this->strUsageDateTime);			std::cout << "\n-------------------" << std::endl;
 
 
 
 	objectClass << this->strClientPhoneNumber << ", "
-		<< this->strUsageDateTime << ", "
+		<< this->uint64tServiceCode << ", "
 		<< this->strDuration << ", "
-		<< this->uint64tServiceCode << '\n';
+		<< this->strUsageDateTime << '\n';
 
 	if (objectClass.fail())
 	{

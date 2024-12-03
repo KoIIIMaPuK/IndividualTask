@@ -40,7 +40,7 @@ void SService::FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile) 				
  *
  * @param VARIABLE_uint64tServiceCode Код сервиса.
  */
-void SService::FSETSTRING_ServiceCode(const std::string& VARIABLE_strServiceCode) 	{this->strServiceCode = VARIABLE_strServiceCode;}
+void SService::FSETUINT64T_ServiceCode(const std::uint64_t& VARIABLE_uint64tServiceCode) 	{this->uint64tServiceCode = VARIABLE_uint64tServiceCode;}
 
 
 
@@ -51,7 +51,7 @@ void SService::FSETSTRING_ServiceCode(const std::string& VARIABLE_strServiceCode
  *
  * @param VARIABLE_doubleTariff Тариф.
  */
-void SService::FSETDOUBLE_Tariff(double VARIABLE_doubleTariff) 								{this->doubleTariff = VARIABLE_doubleTariff;}
+void SService::FSETSTRING_TypeTime(const std::string& VARIABLE_strTypeTime) 								{this->strTypeTime = VARIABLE_strTypeTime;}
 
 
 
@@ -106,7 +106,7 @@ std::string SService::FGETSTRING_PathFile() 		const {return this->strPathFile;}
  *
  * @return Код сервиса.
  */
-std::string SService::FGETSTRING_ServiceCode() 	const {return this->strServiceCode;}
+std::uint64_t SService::FGETUINT64T_ServiceCode() 	const {return this->uint64tServiceCode;}
 
 
 
@@ -117,7 +117,7 @@ std::string SService::FGETSTRING_ServiceCode() 	const {return this->strServiceCo
  *
  * @return Тариф.
  */
-double SService::FGETDOUBLE_Tariff() 				const {return this->doubleTariff;}
+std::string SService::FGETSTRING_TypeTime() 				const {return this->strTypeTime;}
 
 
 
@@ -162,18 +162,18 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
 
 
 	std::cin.ignore();
-	std::cout << "~$ Enter full name: ";								std::getline(std::cin, this->strNameService);		std::cout << "\n-------------------" << std::endl; 
-	std::cout << "~$ Enter phone number: ";								std::getline(std::cin, this->strTimeUnit);			std::cout << "\n-------------------" << std::endl; 
-	std::cout << "~$ Enter the amount of debt ";						std::cin >> this->strServiceCode;				std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
-	std::cout << "~$ Enter acceptable credit ";							std::cin >> this->doubleTariff;						std::cin.ignore();						std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter full name service: ";						std::getline(std::cin, this->strNameService);		std::cout << "\n-------------------" << std::endl; 
+	std::cout << "~$ Enter service code: ";								std::cin >> this->uint64tServiceCode;				std::cin.ignore(); 
+	std::cout << "~$ Enter the time unit: ";						    std::getline(std::cin, this->strTimeUnit);			std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter acceptable credit: ";						std::getline(std::cin, this->strTypeTime);			std::cout << "\n-------------------" << std::endl;
 
 
 
 
 	objectClass << this->strNameService << ", "
+		<< this->uint64tServiceCode << ", "
 		<< this->strTimeUnit << ", "
-		<< this->strServiceCode << ", "
-		<< this->doubleTariff << '\n';
+		<< this->strTypeTime << '\n';
 	
 
 

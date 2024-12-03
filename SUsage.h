@@ -54,7 +54,7 @@ public:
 		strUsageDateTime("Undefined"),
 		strDuration("Undefined"),
 		strPathFile("TextFilesFolder/"),
-		strNameFile("UndefinedService.txt"),
+		strNameFile("UndefinedUsage.txt"),
 		uint64tServiceCode(0)
 	{}
 

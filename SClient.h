@@ -48,7 +48,7 @@ public:
 		strDateConclusionContract("Undefined"),
 		strDataExpirationContract("Undefined"),
 		strPathFile("TextFilesFolder/"),
-		strNameFile("UndefinedService.txt"),
+		strNameFile("UndefinedClient.txt"),
 		doubleDebtAmount(0.0),
 		doubleCreditAllowable(0.0)
 	{}
@@ -131,14 +131,6 @@ public:
 
 
 
-
-
-
-
-
-
-
-    friend std::istream& operator>>(std::istream& is, SClient& client);
 
 
  

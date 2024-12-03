@@ -25,14 +25,14 @@ public:
 		const std::string& VARIABLE_strTimeUnit,
 		const std::string& VARIABLE_strPathFile,
 		const std::string& VARIABLE_strNameFiles,
-		const std::string& VARIABLE_strServiceCode,
-		const double& VARIABLE_doubleTariff
+		const std::uint64_t& VARIABLE_uint64tServiceCode,
+		const std::string& VARIABLE_strTypeTime
 	) : strNameService(VARIABLE_strNameService),
 		strTimeUnit(VARIABLE_strTimeUnit),
 		strPathFile(VARIABLE_strPathFile),
 		strNameFile(VARIABLE_strNameFiles),
-		strServiceCode(VARIABLE_strServiceCode),
-		doubleTariff(VARIABLE_doubleTariff)
+		uint64tServiceCode(VARIABLE_uint64tServiceCode),
+		strTypeTime(VARIABLE_strTypeTime)
 	{}
 
 
@@ -51,8 +51,8 @@ public:
 		strTimeUnit("Undefined"),
 		strPathFile("TextFilesFolder/"),
 		strNameFile("UndefinedService.txt"),
-		strServiceCode(0),
-		doubleTariff(0.0)
+		uint64tServiceCode(0),
+		strTypeTime("sec")
 	{}
 
 
@@ -69,8 +69,8 @@ public:
 	void FSETSTRING_NameService(const std::string& VARIABLE_strNameService);
 	void FSETSTRING_TimeUnit(const std::string& VARIABLE_strTimeUnit);
 	void FSETSTRING_PathFile(const std::string& VARIABLE_strPathFile);
-	void FSETSTRING_ServiceCode(const std::string& VARIABLE_strServiceCode);
-	void FSETDOUBLE_Tariff(double VARIABLE_doubleTariff);
+	void FSETUINT64T_ServiceCode(const std::uint64_t& VARIABLE_uint64tServiceCode);
+	void FSETSTRING_TypeTime(const std::string& VARIABLE_strTypeTime);
 
 
 
@@ -87,8 +87,8 @@ public:
 	std::string		FGETSTRING_NameService()		const;
 	std::string		FGETSTRING_TimeUnit()			const;
 	std::string		FGETSTRING_PathFile()			const;
-	std::string		FGETSTRING_ServiceCode()		const;
-	double			FGETDOUBLE_Tariff()				const;
+	std::uint64_t	FGETUINT64T_ServiceCode()		const;
+	std::string		FGETSTRING_TypeTime()			const;
 
 
 
@@ -141,6 +141,6 @@ protected:
 	std::string strTimeUnit;
 	std::string strPathFile;
 	std::string strNameFile;
-	std::string strServiceCode;
-	double doubleTariff;
+	std::uint64_t uint64tServiceCode;
+	std::string strTypeTime;
 };
