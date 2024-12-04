@@ -642,6 +642,112 @@ void findClientNameByPhoneNumber(const std::string& phoneNumber, std::string& cl
 
 
 
+void findClientsByServiceName(const std::string& serviceName, std::vector<std::string>& clientNames) {
+    std::ifstream serviceFile("TextFilesFolder/Service.txt");
+    if (!serviceFile.is_open()) {
+        throw std::runtime_error("Failed to open file: TextFilesFolder/Service.txt");
+    }
+
+    std::string line;
+    std::string serviceCode;
+    bool serviceFound = false;
+
+    // Шаг 1: Найти код услуги по названию услуги
+    while (std::getline(serviceFile, line)) {
+        size_t commaPos = line.find(',');
+        if (commaPos != std::string::npos) {
+            std::string currentServiceName = line.substr(0, commaPos);
+            currentServiceName.erase(currentServiceName.find_last_not_of(" ") + 1);
+            currentServiceName.erase(0, currentServiceName.find_first_not_of(" "));
+
+            if (currentServiceName == serviceName) {
+                serviceCode = line.substr(commaPos + 1, line.find(',', commaPos + 1) - commaPos - 1);
+                serviceCode.erase(serviceCode.find_last_not_of(" ") + 1);
+                serviceCode.erase(0, serviceCode.find_first_not_of(" "));
+                serviceFound = true;
+                break;
+            }
+        }
+    }
+
+    serviceFile.close(); // Закрываем файл
+
+    if (!serviceFound) {
+        std::cout << "Услуга с названием " << serviceName << " не найдена." << std::endl;
+        return;
+    }
+
+    std::ifstream usageFile("TextFilesFolder/Usage.txt");
+    if (!usageFile.is_open()) {
+        throw std::runtime_error("Failed to open file: TextFilesFolder/Usage.txt");
+    }
+
+    while (std::getline(usageFile, line)) {
+        std::stringstream ss(line);
+        std::string currentPhoneNumber;
+        std::string currentServiceCode;
+
+        if (std::getline(ss, currentPhoneNumber, ',')) {
+            // Убираем пробелы
+            currentPhoneNumber.erase(currentPhoneNumber.find_last_not_of(" ") + 1);
+            currentPhoneNumber.erase(0, currentPhoneNumber.find_first_not_of(" "));
+            
+            if (std::getline(ss, currentServiceCode, ',')) {
+                currentServiceCode.erase(currentServiceCode.find_last_not_of(" ") + 1);
+                currentServiceCode.erase(0, currentServiceCode.find_first_not_of(" "));
+                
+                if (currentServiceCode == serviceCode) {
+                    // Найти имя клиента по номеру телефона
+                    std::ifstream clientFile("TextFilesFolder/Client.txt");
+                    if (!clientFile.is_open()) {
+                        throw std::runtime_error("Failed to open file: TextFilesFolder/Client.txt");
+                    }
+
+                    std::string clientLine;
+                    while (std::getline(clientFile, clientLine)) {
+                        std::stringstream clientSS(clientLine);
+                        std::string name;
+                        std::string phone;
+
+                        if (std::getline(clientSS, name, ',')) {
+                            name.erase(name.find_last_not_of(" ") + 1);
+                            name.erase(0, name.find_first_not_of(" "));
+                            
+                            if (std::getline(clientSS, phone, ',')) {
+                                phone.erase(phone.find_last_not_of(" ") + 1);
+                                phone.erase(0, phone.find_first_not_of(" "));
+                                
+                                if (phone == currentPhoneNumber) {
+                                    clientNames.push_back(name);
+                                    break; 
+                                }
+                            }
+                        }
+                    }
+
+                    clientFile.close(); // Закрываем файл
+                }
+            }
+        }
+    }
+
+    usageFile.close(); // Закрываем файл
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -711,7 +817,12 @@ int main() {
             std::string phoneNumberOfTheDesiredClient;
             std::string serviceCodeOfTheDesiredPhoneNumber;
             std::string serviceNameOfTheDesiredServiceCode;
+
+            std::vector<std::string> clientNames;
             
+            findClientsByServiceName("SMS", clientNames);
+
+            /*
             std::cout << "Input name of the clint you are looking: ";
 
             std::cin.ignore();
@@ -724,7 +835,12 @@ int main() {
             findServiceNumberByPhone(phoneNumberOfTheDesiredClient, serviceCodeOfTheDesiredPhoneNumber);
             findServiceNameByCode(serviceCodeOfTheDesiredPhoneNumber, serviceNameOfTheDesiredServiceCode);
             
-            
+            */
+
+           for (const auto& name : clientNames) 
+            {
+                std::cout << name << std::endl;
+            }
 
         } else { // Обработка неверного ввода
             std::cerr << "Invalid input. Expected 1, 2, or 0.\n";
