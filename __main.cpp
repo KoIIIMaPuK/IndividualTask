@@ -114,20 +114,6 @@ static inline void FShowMenuFile() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * @brief Получает текущее время в формате строки.
  *
@@ -145,17 +131,6 @@ std::string GetCurrentTime() {
     oss << std::put_time(&now_tm, "%Y-%m-%d %H:%M:%S");
     return oss.str();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -232,7 +207,6 @@ void HandleFileOperation(Action action, FileType fileType, SClient& client, SSer
     // Закрываем файл отчета
     reportFile.close();
 }
-
 
 
 
@@ -314,21 +288,21 @@ void HandleFileOperation(Action action, FileType fileType, std::string& fileName
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief Находит номер телефона клиента по его имени.
+ *
+ * Эта функция ищет номер телефона клиента в файле "Client.txt" по указанному имени клиента. 
+ * Если клиент с таким именем найден, его номер телефона будет сохранён в переданном параметре.
+ *
+ * @param clientName Имя клиента, по которому производится поиск номера телефона.
+ * @param clientPhoneNumber Ссылка на строку, в которую будет записан номер телефона клиента, если он найден.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Client.txt".
+ *
+ * @note Функция игнорирует регистр при сравнении имен клиентов. 
+ *       Если клиент с указанным именем не найден, функция выводит сообщение об этом.
+ *       В случае успешного поиска, номер телефона будет выведен на экран и сохранён в параметре clientPhoneNumber.
+ */
 void findClientPhoneNumber(const std::string& clientName, std::string& clientPhoneNumber) {
     std::ifstream RobjectClass("TextFilesFolder/Client.txt"); // Объект для чтения из файла
     if (!RobjectClass.is_open()) {
@@ -338,7 +312,6 @@ void findClientPhoneNumber(const std::string& clientName, std::string& clientPho
     std::string line;
     bool found = false;
 
-    // Приводим имя клиента к нижнему регистру для сравнения
     std::string lowerClientName = clientName;
     std::transform(lowerClientName.begin(), lowerClientName.end(), lowerClientName.begin(), ::tolower);
 
@@ -347,21 +320,15 @@ void findClientPhoneNumber(const std::string& clientName, std::string& clientPho
         std::string name;
         std::string phoneNumber;
 
-        // Извлекаем имя клиента
         if (std::getline(ss, name, ',')) {
-            // Убираем пробелы
             name.erase(name.find_last_not_of(" ") + 1);
             name.erase(0, name.find_first_not_of(" "));
 
-            // Приводим имя клиента к нижнему регистру для сравнения
             std::string lowerName = name;
             std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
 
-            // Если имя совпадает
             if (lowerName == lowerClientName) {
-                // Извлекаем номер телефона
                 if (std::getline(ss, phoneNumber, ',')) {
-                    // Убираем пробелы
                     phoneNumber.erase(phoneNumber.find_last_not_of(" ") + 1);
                     phoneNumber.erase(0, phoneNumber.find_first_not_of(" "));
                     
@@ -380,15 +347,28 @@ void findClientPhoneNumber(const std::string& clientName, std::string& clientPho
         std::cout << "Клиент с именем " << clientName << " не найден." << std::endl;
     }
 
-    RobjectClass.close(); // Закрываем файл
+    RobjectClass.close();
 }
 
 
 
 
-
+/**
+ * @brief Находит номер услуги по номеру телефона.
+ *
+ * Эта функция ищет номер услуги в файле "Usage.txt" по указанному номеру телефона. 
+ * Если услуга с таким номером телефона найдена, её номер будет сохранён в переданном параметре.
+ *
+ * @param phoneNumber Номер телефона, по которому производится поиск номера услуги.
+ * @param serviceNumber Ссылка на строку, в которую будет записан номер услуги, если он найден.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Usage.txt".
+ *
+ * @note Если услуга с указанным номером телефона не найдена, функция выводит сообщение об этом.
+ *       В случае успешного поиска, номер услуги будет выведен на экран и сохранён в параметре serviceNumber.
+ */
 void findServiceNumberByPhone(const std::string& phoneNumber, std::string& serviceNumber) {
-    std::ifstream usageFile("TextFilesFolder/Usage.txt"); // Объект для чтения из файла
+    std::ifstream usageFile("TextFilesFolder/Usage.txt");
     if (!usageFile.is_open()) {
         throw std::runtime_error("Failed to open file: TextFilesFolder/Usage.txt");
     }
@@ -428,9 +408,22 @@ void findServiceNumberByPhone(const std::string& phoneNumber, std::string& servi
 
 
 
-
+/**
+ * @brief Находит имя услуги по её коду.
+ *
+ * Эта функция ищет имя услуги в файле "Service.txt" по указанному коду услуги. 
+ * Если услуга с таким кодом найдена, её имя будет сохранено в переданном параметре.
+ *
+ * @param serviceCode Код услуги, по которому производится поиск имени услуги.
+ * @param serviceName Ссылка на строку, в которую будет записано имя услуги, если оно найдено.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Service.txt".
+ *
+ * @note Если услуга с указанным кодом не найдена, функция выводит сообщение об этом.
+ *       В случае успешного поиска, имя услуги будет выведено на экран и сохранено в параметре serviceName.
+ */
 void findServiceNameByCode(const std::string& serviceCode, std::string& serviceName) {
-    std::ifstream serviceFile("TextFilesFolder/Service.txt"); // Объект для чтения из файла
+    std::ifstream serviceFile("TextFilesFolder/Service.txt");
     if (!serviceFile.is_open()) {
         throw std::runtime_error("Failed to open file: TextFilesFolder/Service.txt");
     }
@@ -464,7 +457,7 @@ void findServiceNameByCode(const std::string& serviceCode, std::string& serviceN
         std::cout << "Услуга с кодом " << serviceCode << " не найдена." << std::endl;
     }
 
-    serviceFile.close(); // Закрываем файл
+    serviceFile.close();
 }
 
 
@@ -478,9 +471,19 @@ void findServiceNameByCode(const std::string& serviceCode, std::string& serviceN
 
 
 /**
- * @brief Функция для поиска сервис-кода по имени сервиса
- * 
- * 
+ * @brief Находит код услуги по её названию.
+ *
+ * Эта функция ищет код услуги в файле "Service.txt" по указанному названию услуги. 
+ * Если услуга с таким названием найдена, её код будет сохранён в переданном параметре.
+ *
+ * @param serviceName Название услуги, по которому производится поиск кода услуги.
+ * @param serviceCode Ссылка на строку, в которую будет записан код услуги, если он найден.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Service.txt".
+ *
+ * @note Поиск осуществляется без учёта регистра. Если услуга с указанным именем не найдена, 
+ *       функция выводит сообщение об этом. В случае успешного поиска, код услуги будет выведен на экран 
+ *       и сохранён в параметре serviceCode.
  */
 void findServiceCodeByName(const std::string& serviceName, std::string& serviceCode) {
     std::ifstream serviceFile("TextFilesFolder/Service.txt");
@@ -529,6 +532,20 @@ void findServiceCodeByName(const std::string& serviceName, std::string& serviceC
 
 
 
+/**
+ * @brief Находит номер телефона по коду услуги.
+ *
+ * Эта функция ищет номер телефона в файле "Usage.txt" по указанному коду услуги. 
+ * Если код услуги найден, соответствующий номер телефона будет сохранён в переданном параметре.
+ *
+ * @param serviceCode Код услуги, по которому производится поиск номера телефона.
+ * @param phoneNumber Ссылка на строку, в которую будет записан номер телефона, если он найден.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Usage.txt".
+ *
+ * @note Если услуга с указанным кодом не найдена, функция выводит сообщение об этом.
+ *       В случае успешного поиска, номер телефона будет выведен на экран и сохранён в параметре phoneNumber.
+ */
 void findPhoneNumberByServiceCode(const std::string& serviceCode, std::string& phoneNumber) {
     std::ifstream usageFile("TextFilesFolder/Usage.txt");
     if (!usageFile.is_open()) {
@@ -576,6 +593,20 @@ void findPhoneNumberByServiceCode(const std::string& serviceCode, std::string& p
 
 
 
+/**
+ * @brief Находит имя клиента по номеру телефона.
+ *
+ * Эта функция ищет клиента в файле "Client.txt" по указанному номеру телефона. 
+ * Если клиент с таким номером найден, его имя будет сохранено в переданном параметре.
+ *
+ * @param phoneNumber Номер телефона, по которому производится поиск клиента.
+ * @param clientName Ссылка на строку, в которую будет записано имя клиента, если он найден.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл "Client.txt".
+ *
+ * @note Если клиент с указанным номером телефона не найден, функция выводит сообщение об этом.
+ *       В случае успешного поиска, имя клиента будет выведено на экран и сохранено в параметре clientName.
+ */
 void findClientNameByPhoneNumber(const std::string& phoneNumber, std::string& clientName) {
     std::ifstream RobjectClass("TextFilesFolder/Client.txt"); // Объект для чтения из файла
     if (!RobjectClass.is_open()) {
@@ -630,18 +661,23 @@ void findClientNameByPhoneNumber(const std::string& phoneNumber, std::string& cl
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief Находит имена клиентов, которые использовали определённую услугу.
+ *
+ * Эта функция ищет клиентов, которые пользовались услугой с заданным именем. 
+ * Читает данные из трёх файлов: 
+ * - "Service.txt" для получения кода услуги по её имени,
+ * - "Usage.txt" для нахождения записей об использовании услуги,
+ * - "Client.txt" для получения имён клиентов по их телефонным номерам.
+ *
+ * @param serviceName Название услуги, по которой производится поиск клиентов.
+ * @param clientNames Вектор, в который будут добавлены имена клиентов, использовавших услугу.
+ *
+ * @throws std::runtime_error Если не удаётся открыть один из файлов ("Service.txt", "Usage.txt" или "Client.txt").
+ *
+ * @note Если услуга с указанным именем не найдена, функция выводит сообщение об этом и завершает выполнение.
+ *       Если клиенты, использовавшие услугу, не найдены, вектор clientNames останется пустым.
+ */
 void findClientsByServiceName(const std::string& serviceName, std::vector<std::string>& clientNames) {
     std::ifstream serviceFile("TextFilesFolder/Service.txt");
     if (!serviceFile.is_open()) {
@@ -725,24 +761,37 @@ void findClientsByServiceName(const std::string& serviceName, std::vector<std::s
                         }
                     }
 
-                    clientFile.close(); // Закрываем файл
+                    clientFile.close();
                 }
             }
         }
     }
 
-    usageFile.close(); // Закрываем файл
+    usageFile.close();
 }
 
 
 
 
-
-
-
-
-
-
+/**
+ * @brief Находит имена клиентов, которые использовали определённую услугу в заданном диапазоне дат.
+ *
+ * Эта функция ищет клиентов, которые пользовались услугой с заданным именем в указанный диапазон дат. 
+ * Читает данные из трёх файлов: 
+ * - "Service.txt" для получения кода услуги по её имени,
+ * - "Usage.txt" для нахождения записей об использовании услуги в указанный период,
+ * - "Client.txt" для получения имён клиентов по их телефонным номерам.
+ *
+ * @param serviceName Название услуги, по которой производится поиск клиентов.
+ * @param startDate Дата начала диапазона, в котором необходимо искать использование услуги.
+ * @param endDate Дата окончания диапазона, в котором необходимо искать использование услуги.
+ * @param clientNames Вектор, в который будут добавлены имена клиентов, использовавших услугу в указанный период.
+ *
+ * @throws std::runtime_error Если не удаётся открыть один из файлов ("Service.txt", "Usage.txt" или "Client.txt").
+ *
+ * @note Если услуга с указанным именем не найдена, функция выводит сообщение об этом и завершает выполнение.
+ *       Если клиенты, использовавшие услугу в заданный период, не найдены, вектор clientNames останется пустым.
+ */
 void findClientsByServiceNameAndDateRange(const std::string& serviceName, const std::tm& startDate, const std::tm& endDate, std::vector<std::string>& clientNames) {
     std::ifstream serviceFile("TextFilesFolder/Service.txt");
     if (!serviceFile.is_open()) {
@@ -753,7 +802,6 @@ void findClientsByServiceNameAndDateRange(const std::string& serviceName, const 
     std::string serviceCode;
     bool serviceFound = false;
 
-    // Шаг 1: Найти код услуги по названию услуги
     while (std::getline(serviceFile, line)) {
         size_t commaPos = line.find(',');
         if (commaPos != std::string::npos) {
@@ -771,14 +819,13 @@ void findClientsByServiceNameAndDateRange(const std::string& serviceName, const 
         }
     }
 
-    serviceFile.close(); // Закрываем файл
+    serviceFile.close();
 
     if (!serviceFound) {
         std::cout << "Услуга с названием " << serviceName << " не найдена." << std::endl;
         return;
     }
 
-    // Шаг 2: Найти клиентов по коду услуги
     std::ifstream usageFile("TextFilesFolder/Usage.txt");
     if (!usageFile.is_open()) {
         throw std::runtime_error("Failed to open file: TextFilesFolder/Usage.txt");
@@ -801,7 +848,6 @@ void findClientsByServiceNameAndDateRange(const std::string& serviceName, const 
                 currentServiceCode.erase(currentServiceCode.find_last_not_of(" ") + 1);
                 currentServiceCode.erase(0, currentServiceCode.find_first_not_of(" "));
                 
-                // Парсим даты
                 std::tm startUsageDate = {};
                 std::istringstream startSS(startDateStr);
                 startSS >> std::get_time(&startUsageDate, "%d.%m.%Y");
@@ -811,13 +857,11 @@ void findClientsByServiceNameAndDateRange(const std::string& serviceName, const 
                 endSS >> std::get_time(&endUsageDate, "%d.%m.%Y");
                 
                 if (currentServiceCode == serviceCode) {
-                    // Проверяем, попадают ли даты в диапазон
                     if ((std::difftime(std::mktime(&startUsageDate), std::mktime(const_cast<std::tm*>(&startDate))) >= 0 && 
                          std::difftime(std::mktime(const_cast<std::tm*>(&endDate)), std::mktime(&startUsageDate)) >= 0) ||
                         (std::difftime(std::mktime(&endUsageDate), std::mktime(const_cast<std::tm*>(&startDate))) >= 0 && 
                          std::difftime(std::mktime(const_cast<std::tm*>(&endDate)), std::mktime(&endUsageDate)) >= 0)) {
                         
-                        // Найти имя клиента по номеру телефона
                         std::ifstream clientFile("TextFilesFolder/Client.txt");
                         if (!clientFile.is_open()) {
                             throw std::runtime_error("Failed to open file: TextFilesFolder/Client.txt");
@@ -839,34 +883,40 @@ void findClientsByServiceNameAndDateRange(const std::string& serviceName, const 
                                     
                                     if (phone == currentPhoneNumber) {
                                         clientNames.push_back(name);
-                                        break; // Выходим из цикла, если нашли клиента
+                                        break;
                                     }
                                 }
                             }
                         }
-                        clientFile.close(); // Закрываем файл клиентов
+                        clientFile.close();
                     }
                 }
             }
         }
     }
 
-    usageFile.close(); // Закрываем файл использования
+    usageFile.close();
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief Парсит файл параметров для извлечения названий услуг и дат.
+ *
+ * Эта функция читает файл с указанным именем и извлекает названия услуг и даты начала и окончания.
+ * Названия услуг сохраняются в векторе, а даты сохраняются в структуре std::tm.
+ *
+ * @param filename Имя файла, который будет прочитан.
+ * @param serviceNames Вектор, в который будут добавлены названия услуг.
+ * @param startDate Структура std::tm, в которую будет записана дата начала.
+ * @param endDate Структура std::tm, в которую будет записана дата окончания.
+ *
+ * @throws std::runtime_error Если не удаётся открыть файл с указанным именем.
+ *
+ * @note Файл должен содержать секции "[Service]" и "[Date]", после которых следуют названия услуг и даты в формате "дд.мм.гггг".
+ *       Если в секции "[Date]" указано только одно значение, оно будет интерпретировано как дата начала, а второе значение — как дата окончания.
+ */
 void parseParamFile(const std::string& filename, std::vector<std::string>& serviceNames, std::tm& startDate, std::tm& endDate) {
     std::ifstream paramFile(filename);
     if (!paramFile.is_open()) {
@@ -878,12 +928,11 @@ void parseParamFile(const std::string& filename, std::vector<std::string>& servi
     bool readingDate = false;
 
     while (std::getline(paramFile, line)) {
-        // Удаляем пробелы в начале и конце строки
         line.erase(line.find_last_not_of(" \n\r\t") + 1);
         line.erase(0, line.find_first_not_of(" \n\r\t"));
 
         if (line.empty()) {
-            continue; // Игнорируем пустые строки
+            continue;
         }
 
         if (line == "[Service]") {
@@ -897,14 +946,12 @@ void parseParamFile(const std::string& filename, std::vector<std::string>& servi
         }
 
         if (readingService) {
-            serviceNames.push_back(line); // Добавляем название услуги
+            serviceNames.push_back(line);
         } else if (readingDate) {
             if (startDate.tm_year == 0) {
-                // Парсим первую дату как StartDate
                 std::istringstream startSS(line);
                 startSS >> std::get_time(&startDate, "%d.%m.%Y");
             } else {
-                // Парсим вторую дату как EndDate
                 std::istringstream endSS(line);
                 endSS >> std::get_time(&endDate, "%d.%m.%Y");
             }
@@ -944,7 +991,7 @@ int main() {
 
     //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     //
-    // Создание объектов для работы с данными.
+    // Создание объектов для работы с данными
     //
     //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     SClient client;
@@ -955,7 +1002,7 @@ int main() {
 
     //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     // 
-    // Основной цикл программы, который будет выполняться до выхода.
+    // Основной цикл программы
     // 
     //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     while (true) {
