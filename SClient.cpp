@@ -172,8 +172,8 @@ void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFi
 	std::cout << "~$ Enter phone number: ";								std::getline(std::cin, this->strClientPhoneNumber);			std::cout << "\n-------------------" << std::endl; // ���������� getline, ����� �������� ������� � ��������� � std::cin
 	std::cout << "~$ Enter the date of conclusion of the contract: ";	std::getline(std::cin, this->strDateConclusionContract);	std::cout << "\n-------------------" << std::endl; // ���������� getline, ����� �������� ������� � ��������� � std::cin
 	std::cout << "~$ Enter the end date of the contract: ";				std::getline(std::cin, this->strDataExpirationContract);	std::cout << "\n-------------------" << std::endl; // ���������� getline, ����� �������� ������� � ��������� � std::cin
-	std::cout << "~$ Enter the amount of debt ";						std::cin >> this->doubleDebtAmount;							std::cin.ignore();					std::cout << "\n-------------------" << std::endl;
-	std::cout << "~$ Enter acceptable credit ";							std::cin >> this->doubleCreditAllowable;					std::cin.ignore();					std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter the amount of debt: ";						std::cin >> this->doubleDebtAmount;							std::cin.ignore();					std::cout << "\n-------------------" << std::endl;
+	std::cout << "~$ Enter acceptable credit: ";						std::cin >> this->doubleCreditAllowable;					std::cin.ignore();					std::cout << "\n-------------------" << std::endl;
 
 	// Запись в файл
 	objectClass << this->strClientFullName << ", "
