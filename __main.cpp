@@ -1112,7 +1112,7 @@ int main() {
             }
 
         } else { // Обработка неверного ввода
-            std::cerr << "Invalid input. Expected 1, 2, or 0.\n";
+            std::cerr << "Invalid input. Expected 1, 2, 3, 4 or 0.\n";
         }
     }
 
