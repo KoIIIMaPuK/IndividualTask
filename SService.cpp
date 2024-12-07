@@ -170,7 +170,7 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
 
 
 
-	objectClass << this->strNameService << ", "
+	objectClass << '\n' << this->strNameService << ", "
 		<< this->uint64tServiceCode << ", "
 		<< this->strTimeUnit << ", "
 		<< this->strTypeTime << '\n';
@@ -184,6 +184,8 @@ void SService::FWriteToFile(std::ofstream& objectClass, const std::string& nameF
 	}
 
 	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }
 
 
@@ -221,5 +223,7 @@ void SService::FReadFileSymbolically(std::ifstream& objectClass, const std::stri
     }
     std::cout << std::endl << "---------------------------------" << std::endl;    
 
-    objectClass.close();
+	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }

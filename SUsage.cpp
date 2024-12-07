@@ -154,7 +154,7 @@ void SUsage::FWriteToFile(std::ofstream& objectClass, const std::string& nameFil
 
 
 
-	objectClass << this->strClientPhoneNumber << ", "
+	objectClass << '\n' << this->strClientPhoneNumber << ", "
 		<< this->uint64tServiceCode << ", "
 		<< this->strDuration << ", "
 		<< this->strUsageDateTime << '\n';
@@ -164,9 +164,9 @@ void SUsage::FWriteToFile(std::ofstream& objectClass, const std::string& nameFil
 		throw std::runtime_error("Failed to write to file: " + strPathFile);
 	}
 
-
-
 	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }
 
 
@@ -205,7 +205,7 @@ void SUsage::FReadFileSymbolically(std::ifstream& objectClass, const std::string
 	}
 	std::cout << std::endl << "---------------------------------" << std::endl;
 
-
-
 	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }

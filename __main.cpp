@@ -1037,7 +1037,6 @@ int main() {
             
             findClientsByServiceName("SMS", clientNames);
 
-/
             std::cout << "Input name of the clint you are looking: ";
 
             std::cin.ignore();

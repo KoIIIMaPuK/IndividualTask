@@ -176,7 +176,7 @@ void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFi
 	std::cout << "~$ Enter acceptable credit: ";						std::cin >> this->doubleCreditAllowable;					std::cin.ignore();					std::cout << "\n-------------------" << std::endl;
 
 	// Запись в файл
-	objectClass << this->strClientFullName << ", "
+	objectClass << '\n' << this->strClientFullName << ", "
 		<< this->strClientPhoneNumber << ", "
 		<< this->strDateConclusionContract << ", "
 		<< this->strDataExpirationContract << ", "
@@ -189,8 +189,9 @@ void SClient::FWriteToFile(std::ofstream& objectClass, const std::string& nameFi
 		throw std::runtime_error("Failed to write to file: " + strPathFile);
 	}
 
-
 	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }
 
 
@@ -222,6 +223,7 @@ void SClient::FReadFileSymbolically(std::ifstream& objectClass, const std::strin
 	this->strNameFile = nameFile;
 
 	objectClass.open(this->strPathFile);
+	std::cout << this->strPathFile;
 	if (!objectClass.is_open()) 
 	{
 		throw std::runtime_error("Failed to open file: " + this->strPathFile);
@@ -237,4 +239,6 @@ void SClient::FReadFileSymbolically(std::ifstream& objectClass, const std::strin
 	std::cout << std::endl << "---------------------------------" << std::endl;	
 
 	objectClass.close();
+
+	this->strPathFile = "TextFilesFolder/";
 }
